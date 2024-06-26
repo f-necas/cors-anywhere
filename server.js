@@ -9,6 +9,8 @@ var port = process.env.PORT || 8080;
 // use originWhitelist instead.
 var originBlacklist = parseEnvList(process.env.CORSANYWHERE_BLACKLIST);
 var originWhitelist = parseEnvList(process.env.CORSANYWHERE_WHITELIST);
+var locationHostBlacklist = parseEnvList(process.env.CORSANYWHERE_LOCATION_HOST_BLACKLIST);
+var locationHostWhitelist = parseEnvList(process.env.CORSANYWHERE_LOCATION_HOST_WHITELIST);
 function parseEnvList(env) {
   if (!env) {
     return [];
@@ -23,7 +25,9 @@ var cors_proxy = require('./lib/cors-anywhere');
 cors_proxy.createServer({
   originBlacklist: originBlacklist,
   originWhitelist: originWhitelist,
-  requireHeader: ['origin', 'x-requested-with'],
+  locationHostWhitelist: locationHostWhitelist,
+  locationHostBlacklist: locationHostBlacklist,
+  requireHeader: [],
   checkRateLimit: checkRateLimit,
   removeHeaders: [
     'cookie',
@@ -46,4 +50,9 @@ cors_proxy.createServer({
   },
 }).listen(port, host, function() {
   console.log('Running CORS Anywhere on ' + host + ':' + port);
+  console.log('Rate limit:', checkRateLimit ? 'enabled' : 'disabled');
+  console.log('Blacklist:', originBlacklist);
+  console.log('Whitelist:', originWhitelist);
+  console.log('Location host whitelist:', locationHostWhitelist);
+  console.log('Location host blacklist:', locationHostBlacklist);
 });

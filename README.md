@@ -166,7 +166,12 @@ export CORSANYWHERE_BLACKLIST=https://abuse.example.com,http://abuse.example.com
 export CORSANYWHERE_RATELIMIT='50 3 my.example.com my2.example.com'
 node server.js
 ```
+## Docker 
 
+```bash
+docker build -t cors-anywhere .
+docker run -p 8080:8080 -e CORSANYWHERE_LOCATION_HOST_WHITELIST=google.fr,google.com --name=cors-anywhere -d cors-anywhere
+```
 
 ## License
 
